@@ -78,6 +78,22 @@ describe Clockwork::DatabaseEvents::Synchronizer do
         assert_equal 1, @events_run.length
       end
 
+      it 'does not run event immediately if last_run_at is populated' do
+        model = DatabaseEventModel.create(:frequency => 10, last_run_at: @now - 1.second)
+        setup_sync(model: DatabaseEventModel, :every => @sync_frequency, :events_run => @events_run)
+
+        tick_at(@now, :and_every_second_for => model.frequency - 2.seconds)
+        assert_equal 0, @events_run.length
+      end
+
+      it 'it runs event at the right duration following the last_run_at value' do
+        model = DatabaseEventModel.create(:frequency => 10, last_run_at: @now - 1.second)
+        setup_sync(model: DatabaseEventModel, :every => @sync_frequency, :events_run => @events_run)
+
+        tick_at(@now, :and_every_second_for => model.frequency - 1.second)
+        assert_equal 1, @events_run.length
+      end
+
       it 'runs event repeatedly with frequency specified in database' do
         model = DatabaseEventModel.create(:frequency => 10)
         setup_sync(model: DatabaseEventModel, :every => @sync_frequency, :events_run => @events_run)

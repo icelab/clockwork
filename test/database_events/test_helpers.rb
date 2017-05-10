@@ -36,7 +36,7 @@ end
 
 class DatabaseEventModel
   include ActiveRecordFake
-  attr_accessor :name, :frequency, :at, :tz
+  attr_accessor :name, :frequency, :at, :tz, :last_run_at
 
   def name
     @name || "#{self.class}:#{id}"
