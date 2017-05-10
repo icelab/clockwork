@@ -8,7 +8,7 @@ module Clockwork
       @period = period
       @job = job
       @at = At.parse(options[:at])
-      @last = nil
+      @last = options[:init_last_run_at]
       @block = block
       @if = options[:if]
       @thread = options.fetch(:thread, @manager.config[:thread])
