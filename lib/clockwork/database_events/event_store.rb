@@ -117,6 +117,7 @@ module Clockwork
         options[:at] = at_strings_for(model) if model.respond_to?(:at)
         options[:if] = ->(time){ model.if?(time) } if model.respond_to?(:if?)
         options[:tz] = model.tz if model.respond_to?(:tz)
+        options[:init_last_run_at] = model.last_run_at if model.respond_to?(:last_run_at)
 
         # store the state of the model at time of registering so we can
         # easily compare and determine if state has changed later
